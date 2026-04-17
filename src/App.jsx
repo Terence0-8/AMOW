@@ -410,6 +410,7 @@ useEffect(() => {
 }, []);
   const [currentView, setCurrentView] = useState('auth'); 
   const [archives, setArchives] = useState([])
+  const [archiveToDelete, setArchiveToDelete] = useState(null)
   const [activeTab, setActiveTab] = useState('gastro'); 
   const [activeDetail, setActiveDetail] = useState(null);
   const [currentActivity, setCurrentActivity] = useState(null);
@@ -1179,6 +1180,76 @@ useEffect(() => {
     );
   };
 
+  const renderArchives = () => (
+  <div className="flex flex-col gap-4 h-full pt-2 animate-bubble overflow-y-auto pb-8 pr-1">
+    {archives.length === 0 ? (
+      <div className={`flex flex-col items-center justify-center h-full gap-3 ${t.textMuted}`}>
+        <div className="text-5xl">🗃️</div>
+        <p className="text-sm font-light">Aucun souvenir pour l'instant.</p>
+      </div>
+    ) : (
+      archives.map((archive, index) => (
+        <div key={archive.id} className={`${t.cardBase} p-5 rounded-2xl animate-deal relative`} style={{ animationDelay: `${index * 60}ms` }}>
+  
+  {/* Bouton suppression */}
+  <button
+    onClick={() => setArchiveToDelete(archive)}
+    className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-red-500/10 text-red-400 transition-colors"
+  >
+    <Trash2 className="w-4 h-4" />
+  </button>
+
+  <div className="flex items-start justify-between pr-8">
+    <h3 className={`${t.textMain} font-medium text-lg`}>{archive.activity_title}</h3>
+    <div className="flex gap-0.5">
+      {[1,2,3,4,5].map(s => (
+        <Star key={s} className={`w-4 h-4 ${archive.rating >= s ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`} />
+      ))}
+    </div>
+  </div>
+  {archive.comment && (
+    <p className={`${t.textMuted} text-sm mt-2 font-light italic`}>"{archive.comment}"</p>
+  )}
+  <p className={`${t.textMuted} text-xs mt-3`}>
+    {new Date(archive.archived_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+  </p>
+</div>
+      ))
+    )}
+  </div>
+)
+
+const renderDeleteArchiveModal = () => {
+  if (!archiveToDelete) return null
+  return (
+    <div className="absolute inset-0 z-[60] bg-black/50 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+      <div className={`${t.cardBase} ${t.modalBg} p-6 w-full max-w-sm space-y-4 rounded-[2rem] animate-bubble border-red-500/30 shadow-2xl shadow-red-900/20`}>
+        <div className="flex flex-col items-center text-center">
+          <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+            <AlertCircle className="w-8 h-8 text-red-500" />
+          </div>
+          <h3 className={`text-2xl font-medium ${t.textMain}`}>Supprimer ce souvenir ?</h3>
+          <p className={`${t.textMuted} text-sm mt-2 font-light`}>
+            <strong className={t.textMain}>"{archiveToDelete.activity_title}"</strong> sera définitivement effacé.
+          </p>
+        </div>
+        <div className="pt-4 flex gap-3">
+          <button onClick={() => setArchiveToDelete(null)} className={`flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 border ${t.btnSecondary}`}>
+            Garder
+          </button>
+          <button onClick={async () => {
+            await supabase.from('archives').delete().eq('id', archiveToDelete.id)
+            setArchives(archives.filter(a => a.id !== archiveToDelete.id))
+            setArchiveToDelete(null)
+          }} className="flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/30">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
   const renderHeader = () => {
     const ThemeToggle = () => (
       <button 
@@ -1206,36 +1277,6 @@ useEffect(() => {
       );
     }
 
-    const renderArchives = () => (
-  <div className="flex flex-col gap-4 h-full pt-2 animate-bubble overflow-y-auto pb-8 pr-1">
-    {archives.length === 0 ? (
-      <div className={`flex flex-col items-center justify-center h-full gap-3 ${t.textMuted}`}>
-        <div className="text-5xl">🗃️</div>
-        <p className="text-sm font-light">Aucun souvenir pour l'instant.</p>
-      </div>
-    ) : (
-      archives.map((archive, index) => (
-        <div key={archive.id} className={`${t.cardBase} p-5 rounded-2xl animate-deal`} style={{ animationDelay: `${index * 60}ms` }}>
-          <div className="flex items-start justify-between">
-            <h3 className={`${t.textMain} font-medium text-lg`}>{archive.activity_title}</h3>
-            <div className="flex gap-0.5">
-              {[1,2,3,4,5].map(s => (
-                <Star key={s} className={`w-4 h-4 ${archive.rating >= s ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`} />
-              ))}
-            </div>
-          </div>
-          {archive.comment && (
-            <p className={`${t.textMuted} text-sm mt-2 font-light italic`}>"{archive.comment}"</p>
-          )}
-          <p className={`${t.textMuted} text-xs mt-3`}>
-            {new Date(archive.archived_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
-        </div>
-      ))
-    )}
-  </div>
-)
-
     return (
       <header className="flex items-center justify-center p-6 z-10 relative">
         <button 
@@ -1250,7 +1291,7 @@ useEffect(() => {
             AMOW
           </h1>
           <span className={`${t.textMuted} text-[10px] font-bold uppercase tracking-widest mt-1`}>
-            {currentView === 'browse' ? 'Catégories' : currentView === 'blind' ? 'Jouer' : 'Assistant'}
+            {currentView === 'browse' ? 'Catégories' : currentView === 'blind' ? 'Jouer' : currentView === 'archives' ? 'Nos Archives' : 'Assistant'}
           </span>
         </div>
       </header>
@@ -1299,6 +1340,7 @@ useEffect(() => {
       {renderVictoryScreen()}
       {renderDeleteConfirmModal()}
       {renderFormModal()}
+      {renderDeleteArchiveModal()}
 
       <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10">
         {renderHeader()}
