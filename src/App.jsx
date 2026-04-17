@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from './supabaseClient';
 import { 
   Compass, EyeOff, ChevronRight, ArrowLeft,
   Coffee, TreePine, Theater, Home, Sparkles, Star,
@@ -401,7 +402,12 @@ const INITIAL_ACTIVITIES = [
 
 export default function App() {
   const [isDark, setIsDark] = useState(false);
-  const [activities, setActivities] = useState(INITIAL_ACTIVITIES);
+  const [activities, setActivities] = useState([]);
+
+useEffect(() => {
+  supabase.from('activities').select('*').order('created_at', { ascending: false })
+    .then(({ data }) => { if (data) setActivities(data) })
+}, []);
   const [currentView, setCurrentView] = useState('auth'); 
   const [activeTab, setActiveTab] = useState('gastro'); 
   const [activeDetail, setActiveDetail] = useState(null);
@@ -461,11 +467,14 @@ export default function App() {
       const newPin = pin + digit;
       setPin(newPin);
       if (newPin.length === 4) {
-        setTimeout(() => {
-          setCurrentView('dashboard');
-          setPin('');
-        }, 300);
+  supabase.from('config').select('value').eq('key', 'pin').single()
+    .then(({ data }) => {
+      if (data?.value === newPin) {
+        setCurrentView('dashboard');
       }
+      setPin('');
+    });
+}
     }
   };
 
@@ -480,24 +489,31 @@ export default function App() {
     setShowFormModal(true);
   };
 
-  const handleSaveActivity = () => {
-    if (!actForm.title || !actForm.desc) return;
-    if (actForm.id) {
-      setActivities(activities.map(a => a.id === actForm.id ? actForm : a));
-    } else {
-      const newActivityData = { id: Date.now(), ...actForm };
-      setActivities([newActivityData, ...activities]);
-    }
-    setShowFormModal(false);
-  };
+  const handleSaveActivity = async () => {
+  if (!actForm.title || !actForm.desc) return;
+  if (actForm.id) {
+    await supabase.from('activities').update({
+      theme_id: actForm.themeId, title: actForm.title,
+      description: actForm.desc, funny: actForm.funny
+    }).eq('id', actForm.id);
+    setActivities(activities.map(a => a.id === actForm.id ? {...a, ...actForm} : a));
+  } else {
+    const { data } = await supabase.from('activities')
+      .insert({ theme_id: actForm.themeId, title: actForm.title, description: actForm.desc, funny: actForm.funny })
+      .select().single();
+    if (data) setActivities([data, ...activities]);
+  }
+  setShowFormModal(false);
+};
 
-  const confirmDelete = () => {
-    if (activityToDelete) {
-      setActivities(activities.filter(a => a.id !== activityToDelete.id));
-      setActivityToDelete(null);
-      setActiveDetail(null);
-    }
-  };
+  const confirmDelete = async () => {
+  if (activityToDelete) {
+    await supabase.from('activities').delete().eq('id', activityToDelete.id);
+    setActivities(activities.filter(a => a.id !== activityToDelete.id));
+    setActivityToDelete(null);
+    setActiveDetail(null);
+  }
+};
 
   const confirmActivity = () => {
     setActiveDetail(null); 
@@ -517,17 +533,21 @@ export default function App() {
     }, 1500);
   };
 
-  const archiveActivity = () => {
-    setShowCompletion(false);
-    setShowArchiveSuccess(true);
-    setTimeout(() => {
-      setShowArchiveSuccess(false);
-      setCurrentActivity(null);
-      setRating(0);
-      setComment("");
-      setCurrentView('dashboard');
-    }, 2500); 
-  };
+  const archiveActivity = async () => {
+  await supabase.from('archives').insert({
+    activity_title: currentActivity?.title,
+    rating,
+    comment
+  });
+  setShowCompletion(false);
+  setShowArchiveSuccess(true);
+  setTimeout(() => {
+    setShowArchiveSuccess(false);
+    setCurrentActivity(null);
+    setRating(0); setComment('');
+    setCurrentView('dashboard');
+  }, 2500);
+};
 
   const renderAuth = () => (
     <div className="auth-screen flex flex-col items-center justify-center h-full px-8 animate-in fade-in zoom-in-95 duration-500 relative z-10">
@@ -598,7 +618,7 @@ export default function App() {
              <span className={`text-[10px] font-bold uppercase tracking-wider ${colorStyle}`}>{theme.name}</span>
           </div>
           <h3 className={`${t.textMain} font-medium text-lg leading-tight transition-colors duration-500`}>{activity.title}</h3>
-          <p className={`${t.textMuted} text-sm mt-1 font-light transition-colors duration-500 line-clamp-1`}>{activity.desc}</p>
+          <p className={`${t.textMuted} text-sm mt-1 font-light transition-colors duration-500 line-clamp-1`}>{activity.description || activity.desc}</p>
         </div>
         
         <div className={`w-8 h-8 relative z-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-500 ${isDark ? 'bg-white/10 group-hover:bg-white/20 text-white/70 group-hover:text-white' : 'bg-white/60 border border-black/5 group-hover:bg-white text-black/40 group-hover:text-black/80 shadow-sm'}`}>
@@ -735,7 +755,7 @@ export default function App() {
               </button>
             </div>
           </div>
-          <p className={`${t.textMain} opacity-90 font-light leading-relaxed`}>{activeDetail.desc}</p>
+          <p className={`${t.textMain} opacity-90 font-light leading-relaxed`}>{activeDetail.description || activeDetail.desc}</p>
           
           {activeDetail.funny && (
             <div className={`p-4 rounded-2xl border relative overflow-hidden ${isDark ? 'bg-white/10 border-white/20' : 'bg-[#F9F8F6] border-[#EAE5E0]'}`}>
