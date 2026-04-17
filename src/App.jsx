@@ -419,7 +419,8 @@ export default function App() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [showVictory, setShowVictory] = useState(false);
-  const [showArchiveSuccess, setShowArchiveSuccess] = useState(false); 
+  const [showArchiveSuccess, setShowArchiveSuccess] = useState(false);
+  const hasTailwindCdn = Boolean(globalThis?.tailwind); 
   const [isShuffling, setIsShuffling] = useState(false);
 
   const [asstThemes, setAsstThemes] = useState([]);
@@ -529,33 +530,33 @@ export default function App() {
   };
 
   const renderAuth = () => (
-    <div className="flex flex-col items-center justify-center h-full px-8 animate-in fade-in zoom-in-95 duration-500 relative z-10">
+    <div className="auth-screen flex flex-col items-center justify-center h-full px-8 animate-in fade-in zoom-in-95 duration-500 relative z-10">
       <div className="text-center mb-8">
-        <h1 className="text-6xl amow-font tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#593C60] via-[#8E6494] to-[#593C60] drop-shadow-sm font-bold">
+        <h1 className="brand-title text-6xl amow-font tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#593C60] via-[#8E6494] to-[#593C60] drop-shadow-sm font-bold">
           AMOW
         </h1>
         <p className={`${t.textMuted} mt-3 text-sm uppercase tracking-widest font-bold`}>Code Secret</p>
       </div>
 
-      <div className="flex justify-center gap-6 mb-12">
+      <div className="pin-dots flex justify-center gap-6 mb-12">
         {[...Array(4)].map((_, i) => (
           <div 
             key={i} 
-            className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+            className={`pin-dot w-4 h-4 rounded-full border-2 transition-all duration-300 ${
               pin.length > i 
-                ? (isDark ? 'bg-purple-400 border-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.5)]' : 'bg-[#593C60] border-[#593C60]') 
+                ? (isDark ? 'pin-dot--filled bg-purple-400 border-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.5)]' : 'pin-dot--filled bg-[#593C60] border-[#593C60]') 
                 : (isDark ? 'border-white/30' : 'border-[#D1C8D4]')
             }`} 
           />
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-6 max-w-[280px]">
+      <div className="pin-grid grid grid-cols-3 gap-6 max-w-[280px]">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
           <button 
             key={num} 
             onClick={() => handlePinPress(num.toString())}
-            className={`w-16 h-16 rounded-full text-2xl font-light flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
+            className={`pin-key w-16 h-16 rounded-full text-2xl font-light flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
           >
             {num}
           </button>
@@ -563,13 +564,13 @@ export default function App() {
         <div />
         <button 
           onClick={() => handlePinPress('0')}
-          className={`w-16 h-16 rounded-full text-2xl font-light flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
+          className={`pin-key w-16 h-16 rounded-full text-2xl font-light flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
         >
           0
         </button>
         <button 
           onClick={() => handlePinPress('del')}
-          className={`w-16 h-16 rounded-full flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
+          className={`pin-key w-16 h-16 rounded-full flex items-center justify-center active:scale-90 transition-all border ${t.pinBtn}`}
         >
           <Delete className="w-6 h-6" />
         </button>
@@ -833,7 +834,7 @@ export default function App() {
   };
 
   const renderDashboard = () => (
-    <div className="flex flex-col gap-4 h-full pt-2 animate-bubble overflow-y-auto pb-8 pr-1">
+    <div className="dashboard-screen flex flex-col gap-4 h-full pt-2 animate-bubble overflow-y-auto pb-8 pr-1">
       {currentActivity && (
         <button 
           onClick={() => setShowCompletion(true)}
@@ -861,8 +862,8 @@ export default function App() {
         </button>
       )}
 
-      <div className="grid grid-cols-2 gap-4 mt-2">
-        <button onClick={() => setCurrentView('browse')} className={`${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '50ms' }}>
+      <div className="dashboard-grid grid grid-cols-2 gap-4 mt-2">
+        <button onClick={() => setCurrentView('browse')} className={`dashboard-card dashboard-card--full ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '50ms' }}>
           <div className="text-5xl mb-1 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">📚</div>
           <div className="text-center">
             <h3 className={`${t.textMain} font-medium text-xl transition-colors duration-700`}>Parcourir</h3>
@@ -870,7 +871,7 @@ export default function App() {
           </div>
         </button>
 
-        <button onClick={() => { setCurrentView('assisted'); setAsstCards([]); setAsstThemes([]); }} className={`${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '100ms' }}>
+        <button onClick={() => { setCurrentView('assisted'); setAsstCards([]); setAsstThemes([]); }} className={`dashboard-card ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '100ms' }}>
           <div className="text-4xl mb-1 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">🎲</div>
           <div className="text-center">
             <h3 className={`${t.textMain} font-medium text-lg transition-colors duration-700`}>L'Assistant</h3>
@@ -878,7 +879,7 @@ export default function App() {
           </div>
         </button>
 
-        <button onClick={() => { setCurrentView('blind'); setBlindStep(0); }} className={`${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '150ms' }}>
+        <button onClick={() => { setCurrentView('blind'); setBlindStep(0); }} className={`dashboard-card ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group active:scale-95 transition-all duration-500 animate-deal rounded-[2.5rem]`} style={{ animationDelay: '150ms' }}>
           <div className="text-4xl mb-1 group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">🙈</div>
           <div className="text-center">
             <h3 className={`${t.textMain} font-medium text-lg transition-colors duration-700`}>Aveugle</h3>
@@ -886,7 +887,7 @@ export default function App() {
           </div>
         </button>
 
-        <button onClick={() => alert("Les archives arrivent via Supabase !")} className={`${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal opacity-90 rounded-[2.5rem]`} style={{ animationDelay: '200ms' }}>
+        <button onClick={() => alert("Les archives arrivent via Supabase !")} className={`dashboard-card dashboard-card--full ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal opacity-90 rounded-[2.5rem]`} style={{ animationDelay: '200ms' }}>
           <div className="flex items-center justify-center gap-3">
              <div className="text-3xl drop-shadow-sm">🗃️</div>
              <h3 className={`${t.textMain} font-medium text-xl transition-colors duration-700`}>Nos Archives</h3>
@@ -1193,7 +1194,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen font-sans relative">
+    <div className={`min-h-screen font-sans relative ${hasTailwindCdn ? '' : 'no-tailwind'}`}>
       <style dangerouslySetInnerHTML={{__html: `
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #000; }
@@ -1222,6 +1223,9 @@ export default function App() {
         .animate-card-shuffle-1 { animation: cardShuffle1 0.6s infinite ease-in-out alternate; }
         .animate-card-shuffle-2 { animation: cardShuffle2 0.6s infinite ease-in-out alternate-reverse; }
         .animate-card-shuffle-3 { animation: cardShuffle3 0.6s infinite ease-in-out alternate; }
+
+
+
       `}} />
 
       <div className="fixed inset-0 bg-[#FBF9F6] z-0 transition-opacity duration-1000"></div>
