@@ -409,6 +409,7 @@ useEffect(() => {
     .then(({ data }) => { if (data) setActivities(data) })
 }, []);
   const [currentView, setCurrentView] = useState('auth'); 
+  const [archives, setArchives] = useState([])
   const [activeTab, setActiveTab] = useState('gastro'); 
   const [activeDetail, setActiveDetail] = useState(null);
   const [currentActivity, setCurrentActivity] = useState(null);
@@ -435,6 +436,14 @@ useEffect(() => {
   const [blindSelection, setBlindSelection] = useState([]);
   const [p1Choice, setP1Choice] = useState(null);
   const [p2Choice, setP2Choice] = useState(null);
+
+  useEffect(() => {
+  const fetchArchives = async () => {
+    const { data } = await supabase.from('archives').select('*').order('archived_at', { ascending: false })
+    if (data) setArchives(data)
+  }
+  fetchArchives()
+}, [])
 
   const t = isDark ? {
     textMain: 'text-white',
@@ -538,16 +547,17 @@ useEffect(() => {
     activity_title: currentActivity?.title,
     rating,
     comment
-  });
-  setShowCompletion(false);
-  setShowArchiveSuccess(true);
+  })
+  setShowCompletion(false)
+  setShowArchiveSuccess(true)
   setTimeout(() => {
-    setShowArchiveSuccess(false);
-    setCurrentActivity(null);
-    setRating(0); setComment('');
-    setCurrentView('dashboard');
-  }, 2500);
-};
+    setShowArchiveSuccess(false)
+    setCurrentActivity(null)
+    setRating(0)
+    setComment("")
+    setCurrentView('dashboard')
+  }, 2500)
+}
 
   const renderAuth = () => (
     <div className="auth-screen flex flex-col items-center justify-center h-full px-8 animate-in fade-in zoom-in-95 duration-500 relative z-10">
@@ -907,15 +917,19 @@ useEffect(() => {
           </div>
         </button>
 
-        <button onClick={() => alert("Les archives arrivent via Supabase !")} className={`dashboard-card dashboard-card--full ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal opacity-90 rounded-[2.5rem]`} style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center justify-center gap-3">
-             <div className="text-3xl drop-shadow-sm">🗃️</div>
-             <h3 className={`${t.textMain} font-medium text-xl transition-colors duration-700`}>Nos Archives</h3>
-          </div>
-          <div className="text-center">
-             <p className={`${t.textMuted} text-xs font-light tracking-wide transition-colors duration-700`}>Connectez-vous pour voir vos souvenirs</p>
-          </div>
-        </button>
+        <button 
+  onClick={() => setCurrentView('archives')} 
+  className={`dashboard-card dashboard-card--full ${t.cardBase} hover:border-[#8E6494] p-6 flex flex-col items-center justify-center gap-3 group col-span-2 active:scale-95 transition-all duration-500 animate-deal opacity-90 rounded-[2.5rem]`} 
+  style={{ animationDelay: '200ms' }}
+>
+  <div className="flex items-center justify-center gap-3">
+    <div className="text-3xl drop-shadow-sm">🗃️</div>
+    <h3 className={`${t.textMain} font-medium text-xl transition-colors duration-700`}>Nos Archives</h3>
+  </div>
+  <div className="text-center">
+    <p className={`${t.textMuted} text-xs font-light tracking-wide transition-colors duration-700`}>Retrouvez vos souvenirs</p>
+  </div>
+</button>
       </div>
     </div>
   );
@@ -1192,6 +1206,36 @@ useEffect(() => {
       );
     }
 
+    const renderArchives = () => (
+  <div className="flex flex-col gap-4 h-full pt-2 animate-bubble overflow-y-auto pb-8 pr-1">
+    {archives.length === 0 ? (
+      <div className={`flex flex-col items-center justify-center h-full gap-3 ${t.textMuted}`}>
+        <div className="text-5xl">🗃️</div>
+        <p className="text-sm font-light">Aucun souvenir pour l'instant.</p>
+      </div>
+    ) : (
+      archives.map((archive, index) => (
+        <div key={archive.id} className={`${t.cardBase} p-5 rounded-2xl animate-deal`} style={{ animationDelay: `${index * 60}ms` }}>
+          <div className="flex items-start justify-between">
+            <h3 className={`${t.textMain} font-medium text-lg`}>{archive.activity_title}</h3>
+            <div className="flex gap-0.5">
+              {[1,2,3,4,5].map(s => (
+                <Star key={s} className={`w-4 h-4 ${archive.rating >= s ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`} />
+              ))}
+            </div>
+          </div>
+          {archive.comment && (
+            <p className={`${t.textMuted} text-sm mt-2 font-light italic`}>"{archive.comment}"</p>
+          )}
+          <p className={`${t.textMuted} text-xs mt-3`}>
+            {new Date(archive.archived_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
+        </div>
+      ))
+    )}
+  </div>
+)
+
     return (
       <header className="flex items-center justify-center p-6 z-10 relative">
         <button 
@@ -1264,6 +1308,7 @@ useEffect(() => {
           {currentView === 'browse' && renderBrowse()}
           {currentView === 'assisted' && renderAssisted()}
           {currentView === 'blind' && renderBlindMode()}
+          {currentView === 'archives' && renderArchives()}
           {renderDetailModal()}
           {renderCompletionModal()}
         </main>
