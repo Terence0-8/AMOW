@@ -28,14 +28,14 @@ export function useAuth() {
 
     // Vérifier si le PIN est déjà pris
     const { data: existing } = await supabase
-      .from('users')
-      .select('id')
-      .eq('pin_hash', pin_hash)
-      .single();
+  .from('users')
+  .select('id')
+  .eq('pin_hash', pin_hash)
+  .maybeSingle(); // ← maybeSingle() retourne null sans erreur si aucun résultat
 
-    if (existing) {
-      return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
-    }
+if (existing) {
+  return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
+}
 
     const { data, error } = await supabase
       .from('users')
