@@ -24,50 +24,52 @@ export function useAuth() {
 
   // Créer un compte
   async function register(name, pin) {
-  const pin_hash = await hashPin(pin);
+    const pin_hash = await hashPin(pin);
 
-  // maybeSingle() retourne null sans erreur si aucun résultat
-  const { data: existing } = await supabase
-    .from('users')
-    .select('id')
-    .eq('pin_hash', pin_hash)
-    .maybeSingle();
+    // Vérifier si le PIN est déjà pris
+    const { data: existing } = await supabase
+  .from('users')
+  .select('id')
+  .eq('pin_hash', pin_hash)
+  .maybeSingle(); // ← maybeSingle() retourne null sans erreur si aucun résultat
 
-  if (existing) {
-    return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
-  }
-
-  const { data, error } = await supabase
-    .from('users')
-    .insert({ name: name.trim(), pin_hash })
-    .select()
-    .single();
-
-  if (error) return { error: 'Erreur lors de la création du compte' };
-
-  const user = { id: data.id, name: data.name };
-  localStorage.setItem('amow_user', JSON.stringify(user));
-  setCurrentUser(user);
-  return { success: true };
+if (existing) {
+  return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
 }
+
+    const { data, error } = await supabase
+      .from('users')
+      .insert({ name: name.trim(), pin_hash })
+      .select()
+      .single();
+
+    if (error) return { error: 'Erreur lors de la création du compte' };
+
+    const user = { id: data.id, name: data.name };
+    localStorage.setItem('amow_user', JSON.stringify(user));
+    setCurrentUser(user);
+    return { success: true };
+  }
 
   // Se connecter
   async function login(pin) {
-  const pin_hash = await hashPin(pin);
+    const pin_hash = await hashPin(pin);
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, name')
-    .eq('pin_hash', pin_hash)
-    .maybeSingle(); // ← maybeSingle ici aussi
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, name')
+      .eq('pin_hash', pin_hash)
+      .single();
 
-  if (error || !data) return { error: 'PIN incorrect, réessaie 🔑' };
+    if (error || !data) {
+      return { error: 'PIN incorrect, réessaie 🔑' };
+    }
 
-  const user = { id: data.id, name: data.name };
-  localStorage.setItem('amow_user', JSON.stringify(user));
-  setCurrentUser(user);
-  return { success: true };
-}
+    const user = { id: data.id, name: data.name };
+    localStorage.setItem('amow_user', JSON.stringify(user));
+    setCurrentUser(user);
+    return { success: true };
+  }
 
   // Modifier le nom
   async function updateName(newName) {

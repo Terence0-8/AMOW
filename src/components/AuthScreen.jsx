@@ -140,10 +140,10 @@ export default function AuthScreen({ onAuth, isDark }) {
         disabled={pin.length < 4 || loading}
         onClick={async () => {
           setLoading(true);
-          const result = await login(pin);
-        setLoading(false);
-        if (result.error) setError(result.error);
-        else onAuth();
+          const ok = await login(pin);
+          setLoading(false);
+          if (!ok) setError('PIN incorrect. Réessaie.');
+          else onAuth();
         }}
         className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${pin.length >= 4 ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'}`}
       >
