@@ -2,7 +2,31 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
-// Hash SHA-256 du PIN via l'API Web Crypto native
+// --- Helpers localStorage sécurisés ---
+function saveUser(user) {
+  try {
+    localStorage.setItem('amow_user', JSON.stringify(user));
+  } catch {
+    // Bloqué en sandbox/iframe → no-op
+  }
+}
+
+function loadUser() {
+  try {
+    const stored = localStorage.getItem('amow_user');
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearUser() {
+  try {
+    localStorage.removeItem('amow_user');
+  } catch {}
+}
+
+// --- Hash SHA-256 du PIN ---
 async function hashPin(pin) {
   const encoder = new TextEncoder();
   const data = encoder.encode(pin);
@@ -17,8 +41,8 @@ export function useAuth() {
 
   // Restaurer la session au chargement
   useEffect(() => {
-    const stored = localStorage.getItem('amow_user');
-    if (stored) setCurrentUser(JSON.parse(stored));
+    const storedUser = loadUser();
+    if (storedUser) setCurrentUser(storedUser);
     setLoading(false);
   }, []);
 
@@ -26,16 +50,15 @@ export function useAuth() {
   async function register(name, pin) {
     const pin_hash = await hashPin(pin);
 
-    // Vérifier si le PIN est déjà pris
     const { data: existing } = await supabase
-  .from('users')
-  .select('id')
-  .eq('pin_hash', pin_hash)
-  .maybeSingle(); // ← maybeSingle() retourne null sans erreur si aucun résultat
+      .from('users')
+      .select('id')
+      .eq('pin_hash', pin_hash)
+      .maybeSingle();
 
-if (existing) {
-  return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
-}
+    if (existing) {
+      return { error: 'Ce PIN est déjà utilisé, choisis-en un autre 🔒' };
+    }
 
     const { data, error } = await supabase
       .from('users')
@@ -46,7 +69,7 @@ if (existing) {
     if (error) return { error: 'Erreur lors de la création du compte' };
 
     const user = { id: data.id, name: data.name };
-    localStorage.setItem('amow_user', JSON.stringify(user));
+    saveUser(user);
     setCurrentUser(user);
     return { success: true };
   }
@@ -66,7 +89,7 @@ if (existing) {
     }
 
     const user = { id: data.id, name: data.name };
-    localStorage.setItem('amow_user', JSON.stringify(user));
+    saveUser(user);
     setCurrentUser(user);
     return { success: true };
   }
@@ -83,14 +106,14 @@ if (existing) {
     if (error) return { error: 'Erreur lors de la modification' };
 
     const updated = { ...currentUser, name: newName.trim() };
-    localStorage.setItem('amow_user', JSON.stringify(updated));
+    saveUser(updated);
     setCurrentUser(updated);
     return { success: true };
   }
 
   // Déconnexion
   function logout() {
-    localStorage.removeItem('amow_user');
+    clearUser();
     setCurrentUser(null);
   }
 
