@@ -5,7 +5,7 @@ import {
   Coffee, TreePine, Theater, Home, Sparkles, Star,
   HelpCircle, Moon, Sun, CheckCircle, Ticket, 
   Archive, Plus, Trash2, Delete, Pencil, ChevronDown, AlertCircle,
-  Plane, Palette, Calendar
+  Plane, Palette, Calendar, Heart, BookHeart
 } from 'lucide-react';
 
 // --- LES 10 THÈMES DE TON FICHIER MARKDOWN ---
@@ -19,7 +19,9 @@ const THEMES = [
   { id: 'soirees', name: 'Soirées', icon: Moon, colorLight: 'text-indigo-600', colorDark: 'text-indigo-300', cardLight: 'bg-indigo-50/50 border-indigo-200 hover:border-indigo-400 hover:shadow-indigo-500/20', cardDark: 'bg-indigo-950/20 border-indigo-900/50 hover:border-indigo-500/50 hover:shadow-indigo-900/40' },
   { id: 'creativite', name: 'Créativité', icon: Palette, colorLight: 'text-pink-600', colorDark: 'text-pink-300', cardLight: 'bg-pink-50/50 border-pink-200 hover:border-pink-400 hover:shadow-pink-500/20', cardDark: 'bg-pink-950/20 border-pink-900/50 hover:border-pink-500/50 hover:shadow-pink-900/40' },
   { id: 'bienetre', name: 'Bien-être', icon: Sparkles, colorLight: 'text-teal-600', colorDark: 'text-teal-300', cardLight: 'bg-teal-50/50 border-teal-200 hover:border-teal-400 hover:shadow-teal-500/20', cardDark: 'bg-teal-950/20 border-teal-900/50 hover:border-teal-500/50 hover:shadow-teal-900/40' },
-  { id: 'saisonnier', name: 'Saisonnier', icon: Calendar, colorLight: 'text-rose-600', colorDark: 'text-rose-300', cardLight: 'bg-rose-50/50 border-rose-200 hover:border-rose-400 hover:shadow-rose-500/20', cardDark: 'bg-rose-950/20 border-rose-900/50 hover:border-rose-500/50 hover:shadow-rose-900/40' }
+  { id: 'saisonnier', name: 'Saisonnier', icon: Calendar, colorLight: 'text-rose-600', colorDark: 'text-rose-300', cardLight: 'bg-rose-50/50 border-rose-200 hover:border-rose-400 hover:shadow-rose-500/20', cardDark: 'bg-rose-950/20 border-rose-900/50 hover:border-rose-500/50 hover:shadow-rose-900/40' },
+  { id: 'calin', name: 'Câlins & Frissons', icon: Heart, colorLight: 'text-rose-600', colorDark: 'text-rose-300', cardLight: 'bg-rose-50/50 border-rose-200 hover:border-rose-400 hover:shadow-rose-500/20', cardDark: 'bg-rose-950/20 border-rose-900/50 hover:border-rose-500/50 hover:shadow-rose-900/40' },
+  { id: 'histoire', name: 'Notre Histoire', icon: BookHeart, colorLight: 'text-violet-600', colorDark: 'text-violet-300', cardLight: 'bg-violet-50/50 border-violet-200 hover:border-violet-400 hover:shadow-violet-500/20', cardDark: 'bg-violet-950/20 border-violet-900/50 hover:border-violet-500/50 hover:shadow-violet-900/40' }
 ];
 
 // --- LES 365 IDÉES INTÉGRÉES ---
@@ -397,7 +399,75 @@ const INITIAL_ACTIVITIES = [
   { id: 362, themeId: 'saisonnier', title: 'Poème sous l\'oreiller', desc: 'Petite attention de bon matin', funny: '' },
   { id: 363, themeId: 'saisonnier', title: 'Danser dans la cuisine', desc: 'Pendant que les pâtes cuisent', funny: '' },
   { id: 364, themeId: 'saisonnier', title: 'Premier film de l\'année à minuit', desc: 'Le 31 décembre', funny: '' },
-  { id: 365, themeId: 'saisonnier', title: 'Bilan de l\'année ensemble', desc: 'Relire les 364 archives d\'activités', funny: '' }
+  { id: 365, themeId: 'saisonnier', title: 'Bilan de l\'année ensemble', desc: 'Relire les 364 archives d\'activités', funny: '' },
+
+  // === CÂLINS & FRISSONS — Niveau Tendresse ===
+  { id: 366, themeId: 'calin', title: 'Bain moussant aux pétales de rose', desc: 'Bougies, huiles essentielles, musique douce', funny: '🌸 Tendresse' },
+  { id: 367, themeId: 'calin', title: 'Massage dos express de 20 minutes', desc: 'Pas besoin d\'être kiné, juste doux', funny: '🌸 Tendresse' },
+  { id: 368, themeId: 'calin', title: 'Se regarder dans les yeux 4 minutes', desc: 'L\'exercice scientifique qui génère une connexion aussi forte que des années ensemble', funny: '🌸 Tendresse' },
+  { id: 369, themeId: 'calin', title: 'Câlin cuillère sous les draps', desc: 'Aucun téléphone. Juste vous deux.', funny: '🌸 Tendresse' },
+  { id: 370, themeId: 'calin', title: 'Blind massage', desc: 'Les yeux bandés. Deviner les zones effleurées. Ne rien demander d\'autre', funny: '🌸 Tendresse' },
+  { id: 371, themeId: 'calin', title: 'Slow dance dans le salon', desc: 'Sans musique, juste le silence et le poids de l\'autre contre soi', funny: '🌸 Tendresse' },
+  { id: 372, themeId: 'calin', title: 'Lire à voix haute', desc: 'Allongés, tête sur les genoux. La voix de l\'autre comme berceuse', funny: '🌸 Tendresse' },
+  { id: 373, themeId: 'calin', title: 'Soirée sans téléphone', desc: 'Juste vous deux. Pas d\'écrans, pas d\'excuse de ne pas se regarder', funny: '🌸 Tendresse' },
+  { id: 374, themeId: 'calin', title: 'Câlin marathon 20 minutes', desc: 'Sans bouger. Sans parler. Juste sentir la respiration se synchroniser', funny: '🌸 Tendresse' },
+  { id: 375, themeId: 'calin', title: 'Massage crânien au coucher', desc: 'Le meilleur somnifère naturel — et le plus efficace pour dire "je prends soin de toi"', funny: '🌸 Tendresse' },
+  { id: 376, themeId: 'calin', title: 'Dessiner sur le dos de l\'autre', desc: 'L\'autre devine. Ça commence innocent, ça finit rarement là', funny: '🌸 Tendresse' },
+  { id: 377, themeId: 'calin', title: 'Rituel de coucher luxueux', desc: 'Créer un rituel propre à vous deux — huiles, musique, gestes dans le même ordre. Chaque nuit', funny: '🌸 Tendresse' },
+
+  // === CÂLINS & FRISSONS — Niveau Étincelles ===
+  { id: 378, themeId: 'calin', title: 'Strip questionnaire intime', desc: 'Répondre ou retirer une pièce. On ne s\'arrête pas à mi-chemin 😈', funny: '🔥 Étincelles' },
+  { id: 379, themeId: 'calin', title: 'Massage à l\'aveugle', desc: 'Les yeux bandés, l\'un masse l\'autre de la tête aux pieds. Seuls "plus fort" ou "plus doux" sont autorisés', funny: '🔥 Étincelles' },
+  { id: 380, themeId: 'calin', title: 'Soirée photos intimes', desc: 'Photographe pro pour la soirée. Poses, lumières, regard. L\'appareil ne ment pas 📷', funny: '🔥 Étincelles' },
+  { id: 381, themeId: 'calin', title: 'Soirée lingerie surprise', desc: 'Chacun s\'habille pour faire de l\'effet — pas forcément pour longtemps', funny: '🔥 Étincelles' },
+  { id: 382, themeId: 'calin', title: 'Playlist qu\'on s\'envoie avant', desc: 'Chacun compose sa bande-son pour la soirée. On les écoute dans l\'ordre, sans savoir ce qui vient', funny: '🔥 Étincelles' },
+  { id: 383, themeId: 'calin', title: 'Bain de minuit', desc: 'À une heure improbable, sans prévenir — parce que c\'est exactement pour ça', funny: '🔥 Étincelles' },
+  { id: 384, themeId: 'calin', title: 'Soirée sans lumière artificielle', desc: 'Uniquement des bougies. Voir l\'autre comme jamais', funny: '🔥 Étincelles' },
+  { id: 385, themeId: 'calin', title: 'Blind taste kiss', desc: 'Goûter les mêmes saveurs les yeux bandés — et se les faire deviner autrement', funny: '🔥 Étincelles' },
+  { id: 386, themeId: 'calin', title: 'Jeu de cartes coquin maison', desc: 'Fabriquer ses propres règles ensemble : une carte = une instruction écrite par l\'autre. Aucun joker', funny: '🔥 Étincelles' },
+  { id: 387, themeId: 'calin', title: 'Écrire ce qu\'on aime chez l\'autre', desc: 'Sur le corps, au feutre corporel. Un mot par zone. À lire ensemble après', funny: '🔥 Étincelles' },
+  { id: 388, themeId: 'calin', title: 'Séduction from scratch', desc: 'On fait comme si on se rencontrait pour la première fois. Drague, tension — sans s\'arrêter au baiser', funny: '🔥 Étincelles' },
+  { id: 389, themeId: 'calin', title: 'Tatouage éphémère intime', desc: 'Se dessiner un symbole discret à un endroit que personne d\'autre ne verra', funny: '🔥 Étincelles' },
+
+  // === CÂLINS & FRISSONS — Niveau Flame ===
+  { id: 390, themeId: 'calin', title: 'Soirée jeu de rôle', desc: 'Scénario écrit ensemble en avance — infirmière, inconnus dans un bar, interdit... Le casting est libre', funny: '💋 Flame' },
+  { id: 391, themeId: 'calin', title: 'Réveil doux surprise', desc: 'L\'un prépare quelque chose pour l\'autre au lever. Café, fraise, caresse — à lui d\'inventer', funny: '💋 Flame' },
+  { id: 392, themeId: 'calin', title: 'Soirée "oui à tout"', desc: 'L\'un dit oui à toutes les demandes de l\'autre. Sans limite de temps. Rôles inversés après', funny: '💋 Flame' },
+  { id: 393, themeId: 'calin', title: 'Soirée "fantasme révélé"', desc: 'Chacun écrit son fantasme sur un papier. On échange, on lit à voix haute... et on vote pour ce soir', funny: '💋 Flame' },
+  { id: 394, themeId: 'calin', title: 'Le défi des 10 minutes', desc: 'Un minuteur. 10 minutes chacun. L\'un a le contrôle total, l\'autre suit. À la sonnerie, les rôles s\'inversent', funny: '💋 Flame' },
+  { id: 395, themeId: 'calin', title: 'Nuit blanche romantique', desc: 'Interdiction de dormir. On parle, on touche, on laisse passer l\'aube', funny: '💋 Flame' },
+  { id: 396, themeId: 'calin', title: 'Chuchoter pendant 1h', desc: 'Parler uniquement à voix basse toute la soirée. Ça crée une intimité étrange et addictive', funny: '💋 Flame' },
+  { id: 397, themeId: 'calin', title: 'La liste interdite', desc: 'Chacun écrit 3 choses qu\'il n\'a jamais osé demander. On pose les papiers sur la table. Ce soir, on en choisit une.', funny: '💋 Flame' },
+  { id: 398, themeId: 'calin', title: 'Dîner les yeux bandés', desc: 'L\'un mange les yeux bandés, l\'autre choisit ce qu\'il lui donne, comment, à quel rythme. Les rôles s\'inversent au dessert 🕯️', funny: '💋 Flame' },
+
+  // === JEUX ===
+  { id: 399, themeId: 'jeux', title: 'Quiz "Tu me connais ?"', desc: '20 questions sur l\'autre, préparées à l\'avance. Le score compte. L\'orgueil aussi', funny: '🎯 Jeux' },
+  { id: 400, themeId: 'jeux', title: 'Fléchettes avec gages', desc: 'Chaque zone = un gage tiré au sort. La bull\'s eye = le gage ultime que l\'autre invente 👀', funny: '🎯 Jeux' },
+  { id: 401, themeId: 'jeux', title: 'Morpion géant au sol', desc: 'Masking tape sur le carrelage. Cases assez grandes pour qu\'on soit soi-même les pions', funny: '🎯 Jeux' },
+  { id: 402, themeId: 'jeux', title: 'Défi cuisine 15 min chrono', desc: 'Frigo aléatoire, timer lancé. L\'autre goûte les yeux bandés et note sans diplomatie', funny: '🎯 Jeux' },
+  { id: 403, themeId: 'jeux', title: 'Blind drawing', desc: 'L\'un décrit un objet ou un lieu sans le nommer. L\'autre dessine. Résultats souvent catastrophiques', funny: '🎯 Jeux' },
+  { id: 404, themeId: 'jeux', title: 'Jeu de rôle négociation', desc: 'Vendre à l\'autre l\'objet le plus inutile de la maison. Pitch de 3 min. Le perdant fait la vaisselle de la semaine', funny: '🎯 Jeux' },
+  { id: 405, themeId: 'jeux', title: 'Défi équilibre', desc: 'Qui tient le plus longtemps sur un pied ? Variante : les yeux fermés, les bras croisés. Plus dur qu\'il n\'y paraît', funny: '🎯 Jeux' },
+  { id: 406, themeId: 'jeux', title: 'Memory maison', desc: 'Dos des cartes à jouer + photos imprimées de vous deux. Nostalgique et compétitif', funny: '🎯 Jeux' },
+  { id: 407, themeId: 'jeux', title: 'Défi impro discours', desc: 'Sujet tiré au sort. 2 minutes de préparation. L\'autre note sur 10 avec commentaires publics', funny: '🎯 Jeux' },
+  { id: 408, themeId: 'jeux', title: 'Défi calligraphie', desc: 'Qui reproduit le mieux un caractère arabe, chinois ou coréen ? On vote à la fin comme un jury', funny: '🎯 Jeux' },
+  { id: 409, themeId: 'jeux', title: 'Jeu du mensonge', desc: '3 anecdotes, 1 est inventée. L\'autre a droit à 3 questions. Aucune ne doit trahir', funny: '🎯 Jeux' },
+  { id: 410, themeId: 'jeux', title: 'Défi imitation', desc: 'Imiter une personne que vous connaissez tous les deux. L\'autre devine sans rire. Spoiler : impossible', funny: '🎯 Jeux' },
+  { id: 411, themeId: 'jeux', title: 'Défi : écrire avec l\'autre main', desc: 'La plus belle signature gagne. On encadre le résultat pour l\'humiliation à long terme', funny: '🎯 Jeux' },
+  { id: 412, themeId: 'jeux', title: 'Jeu des tabous maison', desc: 'Faire deviner un mot sans utiliser les 5 mots interdits — sous la pression du chrono', funny: '🎯 Jeux' },
+  { id: 413, themeId: 'jeux', title: 'Défi sport à la maison', desc: '10 pompes, 10 squats, 10 burpees. Qui pose les mains en premier achète l\'apéro', funny: '🎯 Jeux' },
+  { id: 414, themeId: 'jeux', title: 'Post-it sur le front', desc: 'Deviner le mot collé en posant des questions fermées. Variante : personnalités ou souvenirs communs', funny: '🎯 Jeux' },
+  { id: 415, themeId: 'jeux', title: 'Défi : reproduire un plat de chef', desc: 'Avec seulement une photo comme référence. Noté sur présentation, goût, et effort visible', funny: '🎯 Jeux' },
+  { id: 416, themeId: 'jeux', title: 'Tennis de table improvisé', desc: 'Table + livres empilés en filet + couvercles comme raquettes. Règles maison acceptées', funny: '🎯 Jeux' },
+  { id: 417, themeId: 'jeux', title: 'Quiz cinéma blind test', desc: 'Deviner le film à la bande-son. Niveau difficile : les BO sans paroles ni chanson', funny: '🎯 Jeux' },
+  { id: 418, themeId: 'jeux', title: 'Mot interdit de la journée', desc: 'L\'autre choisit ton mot banni. On se surveille mutuellement avec une joie franchement mauvaise 😈', funny: '🎯 Jeux' },
+  { id: 419, themeId: 'jeux', title: 'Défi origami chrono', desc: 'Plier la meilleure grue en 3 minutes. Les essais ratés restent sur la table comme preuves', funny: '🎯 Jeux' },
+  { id: 420, themeId: 'jeux', title: 'Défi : apprendre un tour de magie', desc: 'Maîtriser un tour en 30 minutes, l\'exécuter devant l\'autre sans se faire démasquer', funny: '🎯 Jeux' },
+  { id: 421, themeId: 'jeux', title: 'Course aux étoiles', desc: 'Premier à identifier 5 constellations cette nuit-là — avec app autorisée ou non, à vous de décider', funny: '🎯 Jeux' },
+  { id: 422, themeId: 'jeux', title: 'Défi : faire rire l\'autre en 1 minute', desc: 'Sans le toucher. Sans crier. Chronométré. Stratégie et timing sont tout', funny: '🎯 Jeux' },
+  { id: 423, themeId: 'jeux', title: 'Défi photo artistique', desc: 'Même sujet, chacun le photographie à sa façon. On compare et on se juge avec toute la sévérité qu\'on mérite', funny: '🎯 Jeux' },
+  { id: 424, themeId: 'jeux', title: 'Jeu de société interdit', desc: 'Le plus compétitif que vous possédez. Règles strictes. Pas de clémence', funny: '🎯 Jeux' },
+  { id: 425, themeId: 'jeux', title: 'Tournoi de 5 mini-jeux', desc: 'Pierre-feuille-ciseaux, 421, devinettes, souffler une boulette, memory. Le perdant fait la vaisselle — le gagnant choisit le film', funny: '🎯 Jeux' }
 ];
 
 export default function App() {
