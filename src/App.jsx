@@ -21,7 +21,7 @@ const THEMES = [
   { id: 'bienetre', name: 'Bien-être', icon: Sparkles, colorLight: 'text-teal-600', colorDark: 'text-teal-300', cardLight: 'bg-teal-50/50 border-teal-200 hover:border-teal-400 hover:shadow-teal-500/20', cardDark: 'bg-teal-950/20 border-teal-900/50 hover:border-teal-500/50 hover:shadow-teal-900/40' },
   { id: 'saisonnier', name: 'Saisonnier', icon: Calendar, colorLight: 'text-rose-600', colorDark: 'text-rose-300', cardLight: 'bg-rose-50/50 border-rose-200 hover:border-rose-400 hover:shadow-rose-500/20', cardDark: 'bg-rose-950/20 border-rose-900/50 hover:border-rose-500/50 hover:shadow-rose-900/40' },
   { id: 'calin', name: 'Câlins & Frissons', icon: Heart, colorLight: 'text-rose-600', colorDark: 'text-rose-300', cardLight: 'bg-rose-50/50 border-rose-200 hover:border-rose-400 hover:shadow-rose-500/20', cardDark: 'bg-rose-950/20 border-rose-900/50 hover:border-rose-500/50 hover:shadow-rose-900/40' },
-  { id: 'histoire', name: 'Notre Histoire', icon: BookHeart, colorLight: 'text-violet-600', colorDark: 'text-violet-300', cardLight: 'bg-violet-50/50 border-violet-200 hover:border-violet-400 hover:shadow-violet-500/20', cardDark: 'bg-violet-950/20 border-violet-900/50 hover:border-violet-500/50 hover:shadow-violet-900/40' }
+  { id: 'jeux', name: 'Jeux', icon: BookHeart, colorLight: 'text-violet-600', colorDark: 'text-violet-300', cardLight: 'bg-violet-50/50 border-violet-200 hover:border-violet-400 hover:shadow-violet-500/20', cardDark: 'bg-violet-950/20 border-violet-900/50 hover:border-violet-500/50 hover:shadow-violet-900/40' }
 ];
 
 // --- LES 365 IDÉES INTÉGRÉES ---
