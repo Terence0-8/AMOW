@@ -479,12 +479,15 @@ export default function App() {
 useEffect(() => {
   supabase.from('activities').select('*').order('created_at', { ascending: false })
   .then(({ data }) => {
-    if (data) setActivities(data.map(a => ({
+  if (data) {
+    const normalized = data.map(a => ({
       ...a,
-      themeId: a.themeId ?? a.theme_id,
-      desc: a.desc ?? a.description,
-    })))
-  })
+      themeId: a.theme_id ?? a.themeId,   // snake_case en priorité (vient de Supabase)
+      desc: a.description ?? a.desc,       // idem
+    }));
+    setActivities(normalized);
+  }
+})
 }, []);
   const { currentUser, loading } = useAuth();
   const [currentView, setCurrentView] = useState('auth'); 
