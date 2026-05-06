@@ -478,7 +478,13 @@ export default function App() {
 
 useEffect(() => {
   supabase.from('activities').select('*').order('created_at', { ascending: false })
-    .then(({ data }) => { if (data) setActivities(data) })
+  .then(({ data }) => {
+    if (data) setActivities(data.map(a => ({
+      ...a,
+      themeId: a.themeId ?? a.theme_id,
+      desc: a.desc ?? a.description,
+    })))
+  })
 }, []);
   const { currentUser, loading } = useAuth();
   const [currentView, setCurrentView] = useState('auth'); 
