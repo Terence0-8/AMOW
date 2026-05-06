@@ -1371,6 +1371,44 @@ const renderDeleteArchiveModal = () => {
     );
   };
 
+  // ⏳ Chargement session
+if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#FBF9F6]">
+      <h1 className="text-5xl amow-font text-transparent bg-clip-text bg-gradient-to-r from-[#593C60] via-[#8E6494] to-[#593C60] animate-pulse font-bold">
+        AMOW
+      </h1>
+    </div>
+  );
+}
+
+// 🔒 Non connecté → AuthScreen
+if (!currentUser) {
+  return (
+    <div className={`min-h-screen font-sans relative`}>
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .amow-font { font-family: 'Dancing Script', cursive; }
+        @keyframes bubbleExpand { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-bubble { animation: bubbleExpand 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+      `}} />
+      <div className="fixed inset-0 bg-[#FBF9F6] z-0"></div>
+      <div className={`fixed inset-0 bg-gradient-to-br from-[#1A0B1C] via-[#2D142C] to-[#3B1932] transition-opacity duration-1000 z-0 ${isDark ? 'opacity-100' : 'opacity-0'}`}></div>
+      {/* Toggle dark mode */}
+      <button
+        onClick={() => setIsDark(!isDark)}
+        className={`fixed right-6 top-6 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-500 border z-20 ${isDark ? 'bg-white/10 border-white/20 text-yellow-300' : 'bg-white border-[#EAE5E0] text-[#4A2545] shadow-sm'}`}
+      >
+        {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+      <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10 px-5 py-8">
+        <AuthScreen onAuth={() => {}} isDark={isDark} />
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className={`min-h-screen font-sans relative ${hasTailwindCdn ? '' : 'no-tailwind'}`}>
       <style dangerouslySetInnerHTML={{__html: `
@@ -1418,7 +1456,6 @@ const renderDeleteArchiveModal = () => {
       <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10">
         {renderHeader()}
         <main className={`flex-1 overflow-hidden flex flex-col relative ${currentView !== 'auth' ? 'px-5 pb-6' : ''}`}>
-          {currentView === 'auth' && renderAuth()}
           {currentView === 'dashboard' && renderDashboard()}
           {currentView === 'browse' && renderBrowse()}
           {currentView === 'assisted' && renderAssisted()}
