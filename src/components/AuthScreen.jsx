@@ -219,18 +219,25 @@ export default function AuthScreen({ onAuth, isDark }) {
       {error && <p className="text-red-400 text-sm text-center animate-in fade-in">{error}</p>}
 
       <button
-        disabled={pinConfirm.length < 4 || loading}
-        onClick={async () => {
-          setLoading(true);
-          const ok = await register(name, pin, pinConfirm);
-          setLoading(false);
-          if (!ok) setError('Les PIN ne correspondent pas.');
-          else onAuth();
-        }}
-        className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${pinConfirm.length >= 4 ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-      >
-        {loading ? 'Création...' : 'Créer mon compte 🎉'}
-      </button>
+  disabled={pinConfirm.length < 4 || loading}
+  onClick={async () => {
+    // ✅ Vérification AVANT de passer en loading
+    if (pin !== pinConfirm) {
+      setError('Les PIN ne correspondent pas. Réessaie 🔒');
+      return;
+    }
+    setLoading(true); // ← seulement ici, après la vérif
+    const result = await register(name, pin);
+    setLoading(false);
+    if (result.error) setError(result.error);
+    else onAuth();
+  }}
+  className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${
+    pinConfirm.length >= 4 ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'
+  }`}
+>
+  {loading ? 'Création...' : 'Créer mon compte 🎉'}
+</button>
     </div>
   );
 

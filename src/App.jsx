@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
+import { useAuth } from './hooks/useAuth';
+import AuthScreen from './components/AuthScreen';
 import { 
   Compass, EyeOff, ChevronRight, ArrowLeft,
   Coffee, TreePine, Theater, Home, Sparkles, Star,
@@ -478,6 +480,7 @@ useEffect(() => {
   supabase.from('activities').select('*').order('created_at', { ascending: false })
     .then(({ data }) => { if (data) setActivities(data) })
 }, []);
+  const { currentUser, loading } = useAuth();
   const [currentView, setCurrentView] = useState('auth'); 
   const [archives, setArchives] = useState([])
   const [archiveToDelete, setArchiveToDelete] = useState(null)
