@@ -969,8 +969,7 @@ export default function App() {
           </button>
 
           {/* Profil utilisateur - EN BAS À DROITE AVEC DESIGN COHÉRENT */}
-          <div className={`absolute right-6 bottom-6 flex items-center gap-3 z-10 px-4 py-2 rounded-2xl backdrop-blur-sm transition-all duration-300 ${isDark ? 'bg-white/5 border border-white/10 text-white' : 'bg-white/40 border border-white/60 text-[#593C60]'}`}>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300 ${isDark ? 'bg-purple-500/30 text-purple-200' : 'bg-gradient-to-br from-[#8E6494] to-[#593C60] text-white'} shadow-sm`}>
+      <div className={`absolute right-6 top-20 flex items-center gap-3 z-10 px-4 py-2 rounded-2xl backdrop-blur-sm transition-all duration-300 ${isDark ? 'bg-white/5 border border-white/10 text-white' : 'bg-white/40 border border-white/60 text-[#593C60]'}`}>   <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300 ${isDark ? 'bg-purple-500/30 text-purple-200' : 'bg-gradient-to-br from-[#8E6494] to-[#593C60] text-white'} shadow-sm`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
             <span className="text-sm font-medium whitespace-nowrap">{currentUser?.name || 'Chargement...'}</span>
