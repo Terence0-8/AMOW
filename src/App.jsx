@@ -476,7 +476,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [activities, setActivities] = useState([]);
   const { currentUser, loading, logout } = useAuth();
-  
+
 useEffect(() => {
   if (currentUser) {
     supabase.from('activities').select('*')
@@ -606,8 +606,7 @@ const { data } = await supabase.from('archives').select('*')
     setActivities(activities.map(a => a.id === actForm.id ? {...a, ...actForm} : a));
   } else {
     const { data } = await supabase.from('activities')
-      .insert({ theme_id: actForm.themeId, title: actForm.title, description: actForm.desc, funny: actForm.funny })
-      .select().single();
+    .insert({ theme_id: actForm.themeId, title: actForm.title, description: actForm.desc, funny: actForm.funny, user_id: currentUser?.id })      .select().single();
     if (data) setActivities([data, ...activities]);
   }
   setShowFormModal(false);
