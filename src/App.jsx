@@ -1369,6 +1369,15 @@ const renderDeleteArchiveModal = () => {
           <h1 className="text-5xl amow-font mt-5 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#593C60] via-[#8E6494] to-[#593C60] drop-shadow-sm font-bold">
             AMOW
           </h1>
+
+          <button
+  onClick={() => { logout(); setCurrentView('auth'); }}
+  className={`absolute left-6 top-6 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-500 border active:scale-95 z-20 ${isDark ? 'bg-white/10 border-white/20 text-white/60 hover:bg-white/20' : 'bg-white border-[#EAE5E0] text-[#756677] shadow-sm hover:bg-[#F0EBEF]'}`}
+  title="Se déconnecter"
+>
+  <EyeOff className="w-5 h-5" />
+</button>
+
         </header>
       );
     }
