@@ -73,7 +73,7 @@ export default function AuthScreen({ onAuth, isDark }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login, register } = useAuth(); // à importer depuis useAuth
+  const { login, register } = useAuth();
 
   const t = isDark ? {
     textMain: 'text-white',
@@ -122,7 +122,7 @@ export default function AuthScreen({ onAuth, isDark }) {
     </div>
   );
 
-  // PAGE 2 — Connexion (PIN 4-6 cases)
+  // PAGE 2 — Connexion
   const renderLogin = () => (
     <div className="flex flex-col items-center justify-center h-full gap-8 animate-bubble px-8">
       <div className="text-center">
@@ -141,10 +141,11 @@ export default function AuthScreen({ onAuth, isDark }) {
         onClick={async () => {
           setLoading(true);
           const result = await login(pin);
-         if (result.error) setError(result.error);
-        else onAuth();
+          setLoading(false);
+          if (result.error) setError(result.error);
+          else onAuth();
         }}
-        className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${pin.length >= 4 ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+        className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${pin.length >= 4 && !loading ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'}`}
       >
         {loading ? 'Vérification...' : 'Se connecter'}
       </button>
@@ -218,25 +219,24 @@ export default function AuthScreen({ onAuth, isDark }) {
       {error && <p className="text-red-400 text-sm text-center animate-in fade-in">{error}</p>}
 
       <button
-  disabled={pinConfirm.length < 4 || loading}
-  onClick={async () => {
-    // ✅ Vérification AVANT de passer en loading
-    if (pin !== pinConfirm) {
-      setError('Les PIN ne correspondent pas. Réessaie 🔒');
-      return;
-    }
-    setLoading(true); // ← seulement ici, après la vérif
-    const result = await register(name, pin);
-    setLoading(false);
-    if (result.error) setError(result.error);
-    else onAuth();
-  }}
-  className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${
-    pinConfirm.length >= 4 ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'
-  }`}
->
-  {loading ? 'Création...' : 'Créer mon compte 🎉'}
-</button>
+        disabled={pinConfirm.length < 4 || loading}
+        onClick={async () => {
+          if (pin !== pinConfirm) {
+            setError('Les PIN ne correspondent pas. Réessaie 🔒');
+            return;
+          }
+          setLoading(true);
+          const result = await register(name, pin);
+          setLoading(false);
+          if (result.error) setError(result.error);
+          else onAuth();
+        }}
+        className={`w-full py-4 rounded-[1.5rem] font-medium text-base active:scale-95 transition-all ${
+          pinConfirm.length >= 4 && !loading ? t.btnPrimary : 'opacity-40 grayscale bg-gray-300 text-gray-500 cursor-not-allowed'
+        }`}
+      >
+        {loading ? 'Création...' : 'Créer mon compte 🎉'}
+      </button>
     </div>
   );
 
