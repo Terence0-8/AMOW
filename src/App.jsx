@@ -478,25 +478,21 @@ export default function App() {
   const { currentUser, loading, logout } = useAuth();
 
 useEffect(() => {
-  // Activités custom ajoutées par l'utilisateur (base Supabase)
-  if (!currentUser) return;
   supabase.from('activities').select('*')
-    .eq('user_id', currentUser.id)
     .order('created_at', { ascending: false })
     .then(({ data }) => {
-      if (data) {
+      if (data && data.length > 0) {
         const normalized = data.map(a => ({
           ...a,
           themeId: a.theme_id ?? a.themeId,
           desc: a.description ?? a.desc,
         }));
-        // On fusionne avec les activités initiales hardcodées
         setActivities([...INITIAL_ACTIVITIES, ...normalized]);
       } else {
         setActivities(INITIAL_ACTIVITIES);
       }
     });
-}, [currentUser]);
+}, []);
 
   const [currentView, setCurrentView] = useState('auth');
 
