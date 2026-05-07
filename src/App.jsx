@@ -475,7 +475,8 @@ const INITIAL_ACTIVITIES = [
 export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [activities, setActivities] = useState([]);
-
+  const { currentUser, loading, logout } = useAuth();
+  
 useEffect(() => {
   if (currentUser) {
     supabase.from('activities').select('*')
@@ -493,7 +494,7 @@ useEffect(() => {
       });
   }
 }, [currentUser]);
-  const { currentUser, loading, logout } = useAuth();
+
   const [currentView, setCurrentView] = useState('auth');
 
 // Ajouter cet useEffect après les autres :
