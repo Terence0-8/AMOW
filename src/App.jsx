@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
-import { useAuth } from './hooks/useAuth';
 import AuthScreen from './components/AuthScreen';
+import { useAuth } from './hooks/useAuth';
 import { 
   Compass, EyeOff, ChevronRight, ArrowLeft,
   Coffee, TreePine, Theater, Home, Sparkles, Star,
@@ -476,6 +476,12 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [activities, setActivities] = useState([]);
   const { currentUser, loading, logout } = useAuth();
+
+useEffect(() => {
+  if (!loading && currentUser) {
+    setCurrentView('dashboard');
+  }
+}, [currentUser, loading]);
 
 useEffect(() => {
   supabase.from('activities').select('*')
