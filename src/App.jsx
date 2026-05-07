@@ -124,8 +124,9 @@ export default function App() {
       if (data) setArchives(data);
     };
     
+    // Fetch immédiatement quand currentUser change
     fetchArchives();
-  }, [currentUser]);
+  }, [currentUser?.id]);
 
   const t = isDark ? {
     textMain: 'text-white',
@@ -914,7 +915,15 @@ export default function App() {
     if (currentView === 'dashboard') {
       return (
         <header className="flex flex-col items-center justify-center p-6 pb-2 z-10 animate-in fade-in slide-in-from-top-4 relative">
-          <ThemeToggle />
+          {/* Bouton Dark/Light Mode - À DROITE */}
+          <button 
+            onClick={() => setIsDark(!isDark)}
+            className={`absolute right-6 top-6 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-500 border active:scale-95 z-20 ${isDark ? 'bg-white/10 border-white/20 text-yellow-300 hover:bg-white/20' : 'bg-white border-[#EAE5E0] text-[#4A2545] shadow-sm hover:bg-[#F0EBEF]'}`}
+          >
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+
+          {/* Logo + Titre - AU CENTRE */}
           <div className={`w-28 h-28 rounded-[2rem] overflow-hidden shadow-xl flex-shrink-0 relative group cursor-pointer hover:scale-105 transition-transform duration-500 border-4 ${isDark ? 'border-white/10 shadow-purple-900/20' : 'border-white shadow-purple-200/30 bg-white'}`}>
             <img src="logo.png" alt="AMOW Logo" className="w-full h-full object-contain" />
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -923,6 +932,7 @@ export default function App() {
             AMOW
           </h1>
 
+          {/* Logout Bouton - À GAUCHE */}
           <button
             onClick={() => { logout(); setCurrentView('auth'); }}
             className={`absolute left-6 top-6 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-500 border active:scale-95 z-20 ${isDark ? 'bg-white/10 border-white/20 text-white/60 hover:bg-white/20' : 'bg-white border-[#EAE5E0] text-[#756677] shadow-sm hover:bg-[#F0EBEF]'}`}
@@ -931,12 +941,12 @@ export default function App() {
             <EyeOff className="w-5 h-5" />
           </button>
 
-          {/* ✅ CORRIGER: Afficher le username avec fallback */}
-          <div className={`absolute right-6 top-6 flex items-center gap-2 z-20 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
+          {/* Profil utilisateur - À DROITE MAIS PLUS BAS */}
+          <div className={`absolute right-6 bottom-8 flex items-center gap-2 z-10 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isDark ? 'bg-white/10' : 'bg-[#EAE5E0]'}`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
-            <span className="text-sm font-medium">{currentUser?.name || 'Chargement...'}</span>
+            <span className="text-sm font-medium whitespace-nowrap">{currentUser?.name || 'Chargement...'}</span>
           </div>
         </header>
       );
