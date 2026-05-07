@@ -477,18 +477,22 @@ export default function App() {
   const [activities, setActivities] = useState([]);
 
 useEffect(() => {
-  supabase.from('activities').select('*').order('created_at', { ascending: false })
-  .then(({ data }) => {
-  if (data) {
-    const normalized = data.map(a => ({
-      ...a,
-      themeId: a.theme_id ?? a.themeId,   // snake_case en priorité (vient de Supabase)
-      desc: a.description ?? a.desc,       // idem
-    }));
-    setActivities(normalized);
+  if (currentUser) {
+    supabase.from('activities').select('*')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (data) {
+          const normalized = data.map(a => ({
+            ...a,
+            themeId: a.theme_id ?? a.themeId,
+            desc: a.description ?? a.desc,
+          }));
+          setActivities(normalized);
+        }
+      });
   }
-})
-}, []);
+}, [currentUser]);
   const { currentUser, loading, logout } = useAuth();
   const [currentView, setCurrentView] = useState('auth');
 
