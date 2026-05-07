@@ -89,6 +89,7 @@ export default function App() {
   const [showArchiveSuccess, setShowArchiveSuccess] = useState(false);
   const hasTailwindCdn = Boolean(globalThis?.tailwind); 
   const [isShuffling, setIsShuffling] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [asstThemes, setAsstThemes] = useState([]);
   const [asstCards, setAsstCards] = useState([]);
@@ -355,6 +356,32 @@ export default function App() {
               className={`flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 ${(!actForm.title || !actForm.desc) ? 'opacity-50 grayscale' : t.btnPrimary}`}
             >
               {isEdit ? 'Enregistrer' : 'Ajouter'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderLogoutConfirmModal = () => {
+    if (!showLogoutConfirm) return null;
+    return (
+      <div className="absolute inset-0 z-[60] bg-black/50 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div className={`${t.cardBase} ${t.modalBg} p-6 w-full max-w-sm space-y-4 rounded-[2rem] animate-bubble border-purple-500/30 shadow-2xl shadow-purple-900/20`}>
+          <div className="flex flex-col items-center text-center">
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-purple-900/30' : 'bg-purple-100'}`}>
+              <EyeOff className={`w-8 h-8 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+            </div>
+            <h3 className={`text-2xl font-medium ${t.textMain}`}>Quitter AMOW ?</h3>
+            <p className={`${t.textMuted} text-sm mt-2 font-light`}>Êtes-vous sûr de vouloir vous déconnecter ? Vous pourrez vous reconnecter à tout moment.</p>
+          </div>
+          
+          <div className="pt-4 flex gap-3">
+            <button onClick={() => setShowLogoutConfirm(false)} className={`flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 border ${t.btnSecondary}`}>
+              Rester
+            </button>
+            <button onClick={() => { logout(); setCurrentView('auth'); setShowLogoutConfirm(false); }} className={`flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 ${isDark ? 'bg-purple-500/30 hover:bg-purple-500/40 text-purple-300 border border-purple-500/50' : 'bg-purple-100 hover:bg-purple-200 text-purple-700 border border-purple-300'}`}>
+              Déconnecter
             </button>
           </div>
         </div>
@@ -934,16 +961,16 @@ export default function App() {
 
           {/* Logout Bouton - À GAUCHE */}
           <button
-            onClick={() => { logout(); setCurrentView('auth'); }}
+            onClick={() => setShowLogoutConfirm(true)}
             className={`absolute left-6 top-6 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-500 border active:scale-95 z-20 ${isDark ? 'bg-white/10 border-white/20 text-white/60 hover:bg-white/20' : 'bg-white border-[#EAE5E0] text-[#756677] shadow-sm hover:bg-[#F0EBEF]'}`}
             title="Se déconnecter"
           >
             <EyeOff className="w-5 h-5" />
           </button>
 
-          {/* Profil utilisateur - À DROITE MAIS PLUS BAS */}
-          <div className={`absolute right-6 bottom flex items-center gap-2 z-10 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isDark ? 'bg-white/10' : 'bg-[#EAE5E0]'}`}>
+          {/* Profil utilisateur - EN BAS À DROITE AVEC DESIGN COHÉRENT */}
+          <div className={`absolute right-6 bottom-6 flex items-center gap-3 z-10 px-4 py-2 rounded-2xl backdrop-blur-sm transition-all duration-300 ${isDark ? 'bg-white/5 border border-white/10 text-white' : 'bg-white/40 border border-white/60 text-[#593C60]'}`}>
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300 ${isDark ? 'bg-purple-500/30 text-purple-200' : 'bg-gradient-to-br from-[#8E6494] to-[#593C60] text-white'} shadow-sm`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
             <span className="text-sm font-medium whitespace-nowrap">{currentUser?.name || 'Chargement...'}</span>
@@ -1010,6 +1037,7 @@ export default function App() {
 
       {renderArchiveSuccessScreen()}
       {renderVictoryScreen()}
+      {renderLogoutConfirmModal()}
       {renderDeleteConfirmModal()}
       {renderFormModal()}
       {renderDeleteArchiveModal()}
