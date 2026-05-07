@@ -478,7 +478,9 @@ export default function App() {
   const { currentUser, loading, logout } = useAuth();
 
 useEffect(() => {
+  if (!currentUser) return;
   supabase.from('activities').select('*')
+    .eq('user_id', currentUser.id)
     .order('created_at', { ascending: false })
     .then(({ data }) => {
       if (data) {
@@ -490,7 +492,7 @@ useEffect(() => {
         setActivities(normalized);
       }
     });
-}, []);
+}, [currentUser]);
 
   const [currentView, setCurrentView] = useState('auth');
 
