@@ -533,7 +533,10 @@ useEffect(() => {
 
   useEffect(() => {
   const fetchArchives = async () => {
-    const { data } = await supabase.from('archives').select('*').order('archived_at', { ascending: false })
+    if (!currentUser) return;
+const { data } = await supabase.from('archives').select('*')
+  .eq('user_id', currentUser.id)
+  .order('archived_at', { ascending: false })
     if (data) setArchives(data)
   }
   fetchArchives()
