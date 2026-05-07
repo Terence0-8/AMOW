@@ -501,12 +501,6 @@ useEffect(() => {
     });
 }, []);
 
-// Ajouter cet useEffect après les autres :
-useEffect(() => {
-  if (!loading && currentUser) {
-    setCurrentView('dashboard');
-  }
-}, [currentUser, loading]); 
   const [archives, setArchives] = useState([])
   const [archiveToDelete, setArchiveToDelete] = useState(null)
   const [activeTab, setActiveTab] = useState('gastro'); 
