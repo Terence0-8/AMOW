@@ -1382,6 +1382,13 @@ const renderDeleteArchiveModal = () => {
   <EyeOff className="w-5 h-5" />
 </button>
 
+<div className={`absolute right-6 top-6 flex items-center gap-2 z-20 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
+  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isDark ? 'bg-white/10' : 'bg-[#EAE5E0]'}`}>
+    {currentUser?.name?.charAt(0).toUpperCase()}
+  </div>
+  <span className="text-sm font-medium">{currentUser?.name}</span>
+</div>
+
         </header>
       );
     }
