@@ -1454,7 +1454,7 @@ const renderDeleteArchiveModal = () => {
       <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10">
         {renderHeader()}
         <main className={`flex-1 overflow-hidden flex flex-col relative ${currentView !== 'auth' ? 'px-5 pb-6' : ''}`}>
-          {currentView === 'auth' && renderAuth()}
+          {currentView === 'auth' && <AuthScreen />}
           {currentView === 'dashboard' && renderDashboard()}
           {currentView === 'browse' && renderBrowse()}
           {currentView === 'assisted' && renderAssisted()}
