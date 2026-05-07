@@ -942,7 +942,7 @@ export default function App() {
           </button>
 
           {/* Profil utilisateur - À DROITE MAIS PLUS BAS */}
-          <div className={`absolute right-6 bottom-8 flex items-center gap-2 z-10 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
+          <div className={`absolute right-6 bottom-1 flex items-center gap-2 z-10 ${isDark ? 'text-white/70' : 'text-[#756677]'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${isDark ? 'bg-white/10' : 'bg-[#EAE5E0]'}`}>
               {currentUser?.name?.charAt(0).toUpperCase() || '?'}
             </div>
