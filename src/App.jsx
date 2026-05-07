@@ -644,8 +644,9 @@ useEffect(() => {
   await supabase.from('archives').insert({
     activity_title: currentActivity?.title,
     rating,
-    comment
-  })
+    comment,
+    user_id: currentUser?.id  // ← ADD THIS
+  });
   setShowCompletion(false)
   setShowArchiveSuccess(true)
   setTimeout(() => {
