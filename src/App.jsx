@@ -489,7 +489,7 @@ useEffect(() => {
   }
 })
 }, []);
-  const { currentUser, loading } = useAuth();
+  const { currentUser, loading, logout } = useAuth();
   const [currentView, setCurrentView] = useState('auth');
 
 // Ajouter cet useEffect après les autres :
