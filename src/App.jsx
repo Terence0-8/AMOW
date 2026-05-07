@@ -600,9 +600,9 @@ const { data } = await supabase.from('archives').select('*')
   if (!actForm.title || !actForm.desc) return;
   if (actForm.id) {
     await supabase.from('activities').update({
-      theme_id: actForm.themeId, title: actForm.title,
-      description: actForm.desc, funny: actForm.funny
-    }).eq('id', actForm.id);
+  theme_id: actForm.themeId, title: actForm.title,
+  description: actForm.desc, funny: actForm.funny
+  }).eq('id', actForm.id).eq('user_id', currentUser?.id);
     setActivities(activities.map(a => a.id === actForm.id ? {...a, ...actForm} : a));
   } else {
     const { data } = await supabase.from('activities')
@@ -614,8 +614,9 @@ const { data } = await supabase.from('archives').select('*')
 
   const confirmDelete = async () => {
   if (activityToDelete) {
-    await supabase.from('activities').delete().eq('id', activityToDelete.id);
-    setActivities(activities.filter(a => a.id !== activityToDelete.id));
+  await supabase.from('activities').delete()
+  .eq('id', activityToDelete.id)
+  .eq('user_id', currentUser?.id);    setActivities(activities.filter(a => a.id !== activityToDelete.id));
     setActivityToDelete(null);
     setActiveDetail(null);
   }
@@ -1334,7 +1335,9 @@ const renderDeleteArchiveModal = () => {
             Garder
           </button>
           <button onClick={async () => {
-            await supabase.from('archives').delete().eq('id', archiveToDelete.id)
+            await supabase.from('archives').delete()
+            .eq('id', archiveToDelete.id)
+            .eq('user_id', currentUser?.id)
             setArchives(archives.filter(a => a.id !== archiveToDelete.id))
             setArchiveToDelete(null)
           }} className="flex-1 py-3 rounded-xl font-medium transition-all active:scale-95 bg-red-500 hover:bg-red-600 text-white shadow-md shadow-red-500/30">
