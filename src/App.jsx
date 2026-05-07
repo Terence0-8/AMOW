@@ -473,6 +473,7 @@ const INITIAL_ACTIVITIES = [
 ];
 
 export default function App() {
+  const [currentView, setCurrentView] = useState('auth');
   const [isDark, setIsDark] = useState(false);
   const [activities, setActivities] = useState([]);
   const { currentUser, loading, logout } = useAuth();
@@ -499,8 +500,6 @@ useEffect(() => {
       }
     });
 }, []);
-
-  const [currentView, setCurrentView] = useState('auth');
 
 // Ajouter cet useEffect après les autres :
 useEffect(() => {
