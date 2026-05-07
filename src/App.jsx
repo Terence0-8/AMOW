@@ -478,6 +478,7 @@ export default function App() {
   const { currentUser, loading, logout } = useAuth();
 
 useEffect(() => {
+  // Activités custom ajoutées par l'utilisateur (base Supabase)
   if (!currentUser) return;
   supabase.from('activities').select('*')
     .eq('user_id', currentUser.id)
@@ -489,7 +490,10 @@ useEffect(() => {
           themeId: a.theme_id ?? a.themeId,
           desc: a.description ?? a.desc,
         }));
-        setActivities(normalized);
+        // On fusionne avec les activités initiales hardcodées
+        setActivities([...INITIAL_ACTIVITIES, ...normalized]);
+      } else {
+        setActivities(INITIAL_ACTIVITIES);
       }
     });
 }, [currentUser]);
