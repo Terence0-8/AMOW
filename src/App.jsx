@@ -1014,19 +1014,34 @@ export default function App() {
       {renderFormModal()}
       {renderDeleteArchiveModal()}
 
-      <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10">
-        {renderHeader()}
-        <main className={`flex-1 overflow-hidden flex flex-col relative ${currentView !== 'auth' ? 'px-5 pb-6' : ''}`}>
-          {currentView === 'auth' && renderAuth()}
-          {currentView === 'dashboard' && renderDashboard()}
-          {currentView === 'browse' && renderBrowse()}
-          {currentView === 'assisted' && renderAssisted()}
-          {currentView === 'blind' && renderBlindMode()}
-          {currentView === 'archives' && renderArchives()}
-          {renderDetailModal()}
-          {renderCompletionModal()}
-        </main>
-      </div>
+      {/* ✅ FIX: Ne rien afficher pendant le loading initial */}
+      {loading ? (
+        <div className="max-w-md mx-auto h-screen flex flex-col items-center justify-center relative z-10">
+          <div className="text-center space-y-6">
+            <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 animate-pulse ${isDark ? 'bg-white/10 border-white/20 shadow-purple-900/20' : 'border-white shadow-purple-200/30 bg-white'}`}>
+              <span className="text-5xl">🔮</span>
+            </div>
+            <div>
+              <h2 className={`text-2xl amow-font ${isDark ? 'text-white' : 'text-[#2D1B2E]'}`}>AMOW</h2>
+              <p className={`text-sm mt-2 font-light ${isDark ? 'text-white/60' : 'text-[#756677]'}`}>Restauration de votre session...</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="max-w-md mx-auto h-screen flex flex-col overflow-hidden relative z-10">
+          {renderHeader()}
+          <main className={`flex-1 overflow-hidden flex flex-col relative ${currentView !== 'auth' ? 'px-5 pb-6' : ''}`}>
+            {currentView === 'auth' && renderAuth()}
+            {currentView === 'dashboard' && renderDashboard()}
+            {currentView === 'browse' && renderBrowse()}
+            {currentView === 'assisted' && renderAssisted()}
+            {currentView === 'blind' && renderBlindMode()}
+            {currentView === 'archives' && renderArchives()}
+            {renderDetailModal()}
+            {renderCompletionModal()}
+          </main>
+        </div>
+      )}
     </div>
   );
 }
